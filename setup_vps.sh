@@ -55,6 +55,11 @@ fi
 # 4. Build & Launch
 echo "🏗️  Building & Launching..."
 docker-compose -f docker-compose.caddy.yml build caddy
+
+# Explicitly remove the conflicting container if it exists
+echo "🧹 Cleaning up old mediaflow-proxy..."
+docker rm -f mediaflow-proxy >/dev/null 2>&1 || true
+
 # Use --remove-orphans to cleanup old containers and avoid name conflicts
 docker-compose -f docker-compose.caddy.yml -f docker-compose.mediaflow.yml up -d --remove-orphans --force-recreate
 
