@@ -198,7 +198,7 @@ aiostreams.{$DOMAIN} {
         output stdout
     }
 
-    reverse_proxy aiostreams:3000 {
+    reverse_proxy aiostreams:3002 {
         # header_up X-Real-IP { http.request.remote.host }
         # header_up X-Forwarded-Proto { http.request.scheme }
         # max_conns_per_host 50
