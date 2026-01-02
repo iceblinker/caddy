@@ -84,3 +84,14 @@ This stack is composed of two main Docker Compose files working in tandem:
 *   **Caddyfile**: Central configuration. Uses `{$DOMAIN}` for easy deployment.
     *   To add new sites, simply copy an existing block in `Caddyfile`.
 *   **docker-compose.caddy.yml**: Defines the infrastructure (Caddy + CrowdSec).
+
+## ❓ Troubleshooting
+
+*   **Error: `bind: address already in use`**
+    This means port 80 or 443 is occupied by another service (like Nginx or Apache).
+    **Fix**: Stop the conflicting service.
+    ```bash
+    systemctl stop nginx  # or apache2
+    systemctl disable nginx
+    ```
+
