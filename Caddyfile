@@ -1,8 +1,17 @@
 {
     # Global Options
-    email your-email@example.com
-    # Graceful reload duration
-    grace_period 5s
+    email {$ACME_EMAIL}
+    
+    # CrowdSec Integration
+    order crowdsec first
+    crowdsec {
+        api_url http://crowdsec:8080
+        api_key {$CROWDSEC_API_KEY}
+        ticker_interval 15s
+    }
+
+    # Global Rate Limiting Definition
+    order rate_limit before basicauth
     
     # Global Logging (JSON for parsing tools)
     log {
@@ -18,7 +27,17 @@
 
 # Example: Mediaflow Proxy
 # key request: mediaflow.your-domain.com
-mediaflow.localhost, localhost:8080 {
+mediaflow.{$DOMAIN} {
+    # Active Security
+    crowdsec
+    rate_limit {
+        zone mediaflow_zone {
+            key {remote_host}
+            events 20
+            window 1s
+        }
+    }
+
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -36,7 +55,7 @@ mediaflow.localhost, localhost:8080 {
     @compressible {
         path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
     }
-    encode zstd gzip @compressible
+    encode @compressible zstd gzip
     
     @static {
         file
@@ -51,14 +70,20 @@ mediaflow.localhost, localhost:8080 {
     }
 
     reverse_proxy mediaflow-proxy:8888 {
-        header_up X-Real-IP { remote_host }
-        header_up X-Forwarded-Proto { scheme }
+        # header_up X-Real-IP { http.request.remote.host }
+        # header_up X-Forwarded-Proto { http.request.scheme }
+        
+        # Health Checks
+        lb_policy first
+        health_uri /
+        health_interval 30s
+        health_timeout 5s
     }
 }
 
 # Example: Jackett
 # key request: jackett.your-domain.com
-jackett.localhost, localhost:9117 {
+jackett.{$DOMAIN} {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -76,7 +101,7 @@ jackett.localhost, localhost:9117 {
     @compressible {
         path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
     }
-    encode zstd gzip @compressible
+    encode @compressible zstd gzip
     
     @static {
         file
@@ -92,14 +117,57 @@ jackett.localhost, localhost:9117 {
 
     reverse_proxy jackett:9117 {
         # Robust proxy settings
-        header_up X-Real-IP { remote_host }
-        header_up X-Forwarded-Proto { scheme }
+        # header_up X-Real-IP { http.request.remote.host }
+        # header_up X-Forwarded-Proto { http.request.scheme }
     }
 }
 
-# Example: Static Site / Fallback
-# key request: www.your-domain.com
-localhost {
+# Example: Dozzle
+# key request: dozzle.your-domain.com
+dozzle.{$DOMAIN} {
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+        Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
+        -Server
+        -X-Powered-By
+    }
+    
+    # Performance
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
+    encode @compressible zstd gzip
+    
+    @static {
+        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
+    }
+    header @static Cache-Control "public, max-age=31536000"
+
+    # Common Log
+    log {
+        format json
+        output stdout
+    }
+
+    reverse_proxy dozzle:8080 {
+        # header_up X-Real-IP { http.request.remote.host }
+        # header_up X-Forwarded-Proto { http.request.scheme }
+        # max_conns_per_host 50
+        transport http {
+            keepalive 5m
+        }
+    }
+    request_body 20MB
+}
+
+# Example: AIOStreams
+aiostreams.{$DOMAIN} {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -117,11 +185,10 @@ localhost {
     @compressible {
         path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
     }
-    encode zstd gzip @compressible
+    encode @compressible zstd gzip
     
     @static {
-        file
-        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2
+        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
     }
     header @static Cache-Control "public, max-age=31536000"
 
@@ -130,11 +197,192 @@ localhost {
         format json
         output stdout
     }
-    
-    root * /usr/share/caddy
-    file_server
-    
-    handle_errors {
-        respond "{err.status_code} {err.status_text}"
+
+    reverse_proxy aiostreams:3000 {
+        # header_up X-Real-IP { http.request.remote.host }
+        # header_up X-Forwarded-Proto { http.request.scheme }
+        # max_conns_per_host 50
+        transport http {
+            keepalive 5m
+        }
     }
+    request_body 20MB
+}
+
+# Example: Ollama
+ollama.{$DOMAIN} {
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+        Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
+        -Server
+        -X-Powered-By
+    }
+
+    # Performance
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
+    encode @compressible zstd gzip
+    
+    @static {
+        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
+    }
+    header @static Cache-Control "public, max-age=31536000"
+
+    # Common Log
+    log {
+        format json
+        output stdout
+    }
+
+    reverse_proxy ollama:11434 {
+        # header_up X-Real-IP { http.request.remote.host }
+        # header_up X-Forwarded-Proto { http.request.scheme }
+        transport http {
+            keepalive 5m
+        }
+    }
+    request_body 20MB
+}
+
+# Example: Search API
+search.{$DOMAIN} {
+    # Note: search-api port is 8080 internal. We map to 8081 locally to avoid conflict if any, or just rely on subdomain.
+    # User guide: http://search-api:8080
+    
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+        Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
+        -Server
+        -X-Powered-By
+    }
+
+    # Performance
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
+    encode @compressible zstd gzip
+    
+    @static {
+        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
+    }
+    header @static Cache-Control "public, max-age=31536000"
+
+    # Common Log
+    log {
+        format json
+        output stdout
+    }
+
+    reverse_proxy search-api:8080 {
+        # header_up X-Real-IP { http.request.remote.host }
+        # header_up X-Forwarded-Proto { http.request.scheme }
+        transport http {
+            keepalive 5m
+        }
+    }
+    request_body 20MB
+}
+
+# Example: ChromaDB
+chromadb.{$DOMAIN} {
+    # Note: chromadb port 8000. 
+    # User guide: http://chromadb:8000
+    
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+        Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
+        -Server
+        -X-Powered-By
+    }
+
+    # Performance
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
+    encode @compressible zstd gzip
+    
+    @static {
+        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
+    }
+    header @static Cache-Control "public, max-age=31536000"
+
+    # Common Log
+    log {
+        format json
+        output stdout
+    }
+
+    reverse_proxy chromadb:8000 {
+        # header_up X-Real-IP { http.request.remote.host }
+        # header_up X-Forwarded-Proto { http.request.scheme }
+        transport http {
+            keepalive 5m
+        }
+    }
+    request_body 20MB
+}
+
+# Homepage (The Bridge)
+# key request: home.your-domain.com or just localhost
+# Note: Since localhost overlaps with mediaflow (localhost:8080) and others, Caddy handles specific ports.
+# This block handles default ports if not matched elsewhere, or we can use specific domain.
+home.{$DOMAIN}, {$DOMAIN} {
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+        Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
+        -Server
+        -X-Powered-By
+    }
+
+    # Performance
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
+    encode @compressible zstd gzip
+    
+    @static {
+        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
+    }
+    header @static Cache-Control "public, max-age=31536000"
+
+    # Common Log
+    log {
+        format json
+        output stdout
+    }
+
+    reverse_proxy homepage:3000 {
+        # header_up X-Real-IP { http.request.remote.host }
+        # header_up X-Forwarded-Proto { http.request.scheme }
+        # max_conns_per_host 50
+        transport http {
+            keepalive 5m
+        }
+    }
+    request_body 20MB
 }

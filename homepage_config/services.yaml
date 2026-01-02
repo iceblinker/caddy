@@ -1,0 +1,38 @@
+- Media Stack:
+    - Jackett:
+        icon: jackett.png
+        href: http://jackett.localhost
+        description: Torrent Indexer
+        container: jackett
+    - MediaFlow Proxy:
+        icon: mdi-server-network
+        href: http://mediaflow.localhost
+        description: Debrid Proxy
+        container: mediaflow-proxy
+    - AIOStreams:
+        icon: mdi-movie-roll
+        href: http://aiostreams.localhost
+        description: Stremio Addon
+        container: aiostreams
+    - Dozzle:
+        icon: mdi-docker
+        href: http://dozzle.localhost
+        description: Log Viewer
+        container: dozzle
+
+- AI Services:
+    - Ollama:
+        icon: ollama.png # Ensure you have this icon or use a generic one like mdi-brain
+        href: http://ollama.localhost
+        description: LLM Service
+        container: ollama
+    - Search API:
+        icon: mdi-magnify
+        href: http://search.localhost
+        description: Semantic Search
+        container: search-api
+    - ChromaDB:
+        icon: mdi-database-search
+        href: http://chromadb.localhost
+        description: Vector Database
+        container: chromadb

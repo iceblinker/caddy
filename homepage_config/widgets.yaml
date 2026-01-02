@@ -1,0 +1,5 @@
+- resources:
+    backend: docker
+    label: System
+    cpu: true
+    memory: true

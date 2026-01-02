@@ -1,0 +1,91 @@
+services:
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN
+      - ACME_EMAIL
+      - CROWDSEC_API_KEY
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - caddy_net
+      - ai_network
+    depends_on:
+      - homepage
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:2019/metrics" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    restart: unless-stopped
+    volumes:
+      - ./homepage_config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - caddy_net
+      - ai_network
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "http://localhost:3000" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - caddy_net
+    healthcheck:
+      test: [ "CMD", "/dozzle", "healthcheck" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 86400 --cleanup
+    networks:
+      - caddy_net
+
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    container_name: crowdsec
+    environment:
+      - COLLECTIONS=crowdsecurity/caddy
+    volumes:
+      - crowdsec_db:/var/lib/crowdsec/data
+      - crowdsec_config:/etc/crowdsec
+    networks:
+      - caddy_net
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:
+  crowdsec_db:
+  crowdsec_config:
+
+
+networks:
+  caddy_net:
+    external: true
+  ai_network:
+    external: true

@@ -1,0 +1,6 @@
+.env
+caddy_data/
+caddy_config/
+crowdsec_db/
+crowdsec_config/
+*.log
