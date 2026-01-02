@@ -55,7 +55,8 @@ fi
 # 4. Build & Launch
 echo "🏗️  Building & Launching..."
 docker-compose -f docker-compose.caddy.yml build caddy
-docker-compose -f docker-compose.caddy.yml -f docker-compose.mediaflow.yml up -d
+# Use --remove-orphans to cleanup old containers and avoid name conflicts
+docker-compose -f docker-compose.caddy.yml -f docker-compose.mediaflow.yml up -d --remove-orphans --force-recreate
 
 echo "🎉 Deployment Complete!"
 echo "Check status with: docker ps"
