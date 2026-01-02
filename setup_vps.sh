@@ -3,6 +3,11 @@ set -e
 
 echo "🚀 Starting God Mode Deployment..."
 
+# 0. Ensure Networks Exist
+echo "🌐 Checking Networks..."
+docker network inspect caddy_net >/dev/null 2>&1 || docker network create caddy_net
+docker network inspect ai_network >/dev/null 2>&1 || docker network create ai_network
+
 # 1. Setup Env
 if [ ! -f .env ]; then
     echo "📝 Configuring Environment..."
