@@ -39,8 +39,8 @@ if grep -q "CROWDSEC_API_KEY=$" .env || grep -q "CROWDSEC_API_KEY=$" .env; then 
     API_KEY=$(docker exec crowdsec cscli bouncers add caddy-bouncer)
     
     if [ -n "$API_KEY" ]; then
-        # Use a delimiter that won't appear in the key, or just simple concatenation
-        sed -i "s/CROWDSEC_API_KEY=/CROWDSEC_API_KEY=$API_KEY/" .env
+        # Use pipe delimiter to avoid conflicts with slashes in the key
+        sed -i "s|CROWDSEC_API_KEY=|CROWDSEC_API_KEY=$API_KEY|" .env
         echo "✅ Key injected into .env"
     else
         echo "❌ Failed to generate key. Please run 'docker exec crowdsec cscli bouncers add caddy-bouncer' manually."
