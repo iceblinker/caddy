@@ -29,6 +29,9 @@ This stack is composed of two main Docker Compose files working in tandem:
 *   Docker & Docker Compose installed.
 *   Ports `80` (HTTP) and `443` (HTTPS) open.
 *   A domain name pointing to your server.
+    *   *No Domain?* Use a "magic" domain like `sslip.io`.
+    *   Example: If your IP is `1.2.3.4`, use `1.2.3.4.sslip.io` as your domain.
+    *   This allows `mediaflow.1.2.3.4.sslip.io` to work automatically!
 
 ### Installation
 
