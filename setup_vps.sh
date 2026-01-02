@@ -36,6 +36,8 @@ sleep 10
 # 3. Generate Key if not present
 if grep -q "CROWDSEC_API_KEY=$" .env || grep -q "CROWDSEC_API_KEY=$" .env; then # Checks if empty
     echo "🔑 Generating Security Key..."
+    # Delete existing bouncer if present to ensure we get a new key
+    docker exec crowdsec cscli bouncers delete caddy-bouncer >/dev/null 2>&1 || true
     API_KEY=$(docker exec crowdsec cscli bouncers add caddy-bouncer)
     
     if [ -n "$API_KEY" ]; then
