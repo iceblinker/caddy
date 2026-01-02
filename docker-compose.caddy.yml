@@ -1,6 +1,9 @@
 services:
   caddy:
-    image: caddy:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
+    image: caddy-godmode:latest
     container_name: caddy
     restart: unless-stopped
     ports:
