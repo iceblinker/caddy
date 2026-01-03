@@ -341,6 +341,41 @@ chromadb.{$DOMAIN} {
     request_body 20MB
 }
 
+# Example: Stremio Addon
+# key request: stremio.your-domain.com
+stremio.{$DOMAIN} {
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+        Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
+        -Server
+        -X-Powered-By
+    }
+    
+    # Performance
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
+    encode @compressible zstd gzip
+
+    # Common Log
+    log {
+        format json
+        output stdout
+    }
+
+    reverse_proxy godmode-stremio-addon:8080 {
+        transport http {
+            keepalive 5m
+        }
+    }
+}
+
 # Homepage (The Bridge)
 # key request: home.your-domain.com or just localhost
 # Note: Since localhost overlaps with mediaflow (localhost:8080) and others, Caddy handles specific ports.
