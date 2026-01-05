@@ -83,7 +83,7 @@ mediaflow.{$DOMAIN} {
 
 # Example: Jackett
 # key request: jackett.your-domain.com
-jackett. { $DOMAIN } {
+jackett.{$DOMAIN} {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -124,7 +124,7 @@ jackett. { $DOMAIN } {
 
 # Example: Dozzle
 # key request: dozzle.your-domain.com
-dozzle. { $DOMAIN } {
+dozzle.{$DOMAIN} {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -167,7 +167,7 @@ dozzle. { $DOMAIN } {
 }
 
 # Example: AIOStreams
-aiostreams. { $DOMAIN } {
+aiostreams.{$DOMAIN} {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -210,7 +210,7 @@ aiostreams. { $DOMAIN } {
 }
 
 # Example: Ollama
-ollama. { $DOMAIN } {
+ollama.{$DOMAIN} {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -252,7 +252,7 @@ ollama. { $DOMAIN } {
 }
 
 # Example: Search API
-search. { $DOMAIN } {
+search.{$DOMAIN} {
     # Note: search-api port is 8080 internal. We map to 8081 locally to avoid conflict if any, or just rely on subdomain.
     # User guide: http://search-api:8080
     
@@ -297,7 +297,7 @@ search. { $DOMAIN } {
 }
 
 # Example: ChromaDB
-chromadb. { $DOMAIN } {
+chromadb.{$DOMAIN} {
     # Note: chromadb port 8000. 
     # User guide: http://chromadb:8000
     
@@ -341,11 +341,9 @@ chromadb. { $DOMAIN } {
     request_body 20MB
 }
 
-# Homepage (The Bridge)
-# key request: home.your-domain.com or just localhost
-# Note: Since localhost overlaps with mediaflow (localhost:8080) and others, Caddy handles specific ports.
-# This block handles default ports if not matched elsewhere, or we can use specific domain.
-home. { $DOMAIN }, { $DOMAIN } {
+# Example: Prowlarr (via Gluetun/VPN)
+# key request: prowlarr.your-domain.com
+prowlarr.{$DOMAIN} {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -353,39 +351,6 @@ home. { $DOMAIN }, { $DOMAIN } {
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
-        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
-        Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
-        -Server
-        -X-Powered-By
-    }
-
-    # Performance
-    @compressible {
-        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
-    }
-    encode @compressible zstd gzip
-    
-    @static {
-        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
-    }
-    header @static Cache-Control "public, max-age=31536000"
-
-    # Common Log
-    log {
-        format json
-        output stdout
-    }
-
-    reverse_proxy homepage:3000 {
-        # header_up X-Real-IP { http.request.remote.host }
-        # header_up X-Forwarded-Proto { http.request.scheme }
-        # max_conns_per_host 50
-        transport http {
-            keepalive 5m
-        }
-    }
-    request_body 20MB
-}
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
         Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
         -Server
