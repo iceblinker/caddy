@@ -1,12 +1,12 @@
 {
     # Global Options
-    email { $ACME_EMAIL }
+    email {$ACME_EMAIL}
     
     # CrowdSec Integration
     order crowdsec first
     crowdsec {
         api_url http://crowdsec:8080
-        api_key { $CROWDSEC_API_KEY }
+        api_key {$CROWDSEC_API_KEY}
         ticker_interval 15s
     }
 
@@ -27,12 +27,12 @@
 
 # Example: Mediaflow Proxy
 # key request: mediaflow.your-domain.com
-mediaflow. { $DOMAIN } {
+mediaflow.{$DOMAIN} {
     # Active Security
     crowdsec
     rate_limit {
         zone mediaflow_zone {
-            key { remote_host }
+            key {remote_host}
             events 20
             window 1s
         }
