@@ -475,7 +475,7 @@ corsario.{$DOMAIN} {
         output stdout
     }
 
-    reverse_proxy vixsrc-stream-provider:3000 {
+    reverse_proxy vixsrc-stream-provider:7000 {
         transport http {
             keepalive 5m
         }
