@@ -6,6 +6,8 @@ services:
     image: caddy-godmode:latest
     container_name: caddy
     restart: unless-stopped
+    labels:
+      - "autoheal=true"
     ports:
       - "80:80"
       - "443:443"
@@ -32,6 +34,8 @@ services:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
     restart: unless-stopped
+    labels:
+      - "autoheal=true"
     volumes:
       - ./homepage_config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -48,6 +52,8 @@ services:
     image: amir20/dozzle:latest
     container_name: dozzle
     restart: unless-stopped
+    labels:
+      - "autoheal=true"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
@@ -79,6 +85,19 @@ services:
     networks:
       - caddy_net
     restart: unless-stopped
+    labels:
+      - "autoheal=true"
+
+  autoheal:
+    image: willfarrell/autoheal:latest
+    container_name: autoheal
+    restart: unless-stopped
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - caddy_net
 
 volumes:
   caddy_data:
