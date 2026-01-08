@@ -412,7 +412,7 @@ home. { $DOMAIN }, { $DOMAIN } {
         output stdout
     }
 
-    reverse_proxy vixsrc-addon:3000 {
+    reverse_proxy catalogs-vixsrc-vixsrc-addon:3000 {
         transport http {
             keepalive 5m
         }
