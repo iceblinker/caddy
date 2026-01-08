@@ -412,7 +412,7 @@ home. { $DOMAIN }, { $DOMAIN } {
         output stdout
     }
 
-    reverse_proxy vixsrc-addon:3000 {
+    reverse_proxy host.docker.internal:3015 {
         transport http {
             keepalive 5m
         }
