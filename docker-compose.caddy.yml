@@ -22,6 +22,8 @@ services:
       - DOMAIN
       - ACME_EMAIL
       - CROWDSEC_API_KEY
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
