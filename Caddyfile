@@ -32,7 +32,7 @@ mediaflow. {$DOMAIN} {
     crowdsec
     rate_limit {
         zone mediaflow_zone {
-            key { remote_host}
+            key {remote_host}
             events 20
             window 1s
        }
@@ -70,8 +70,8 @@ mediaflow. {$DOMAIN} {
    }
 
     reverse_proxy mediaflow-proxy:8888 {
-        # header_up X-Real-IP { http.request.remote.host}
-        # header_up X-Forwarded-Proto { http.request.scheme}
+        # header_up X-Real-IP {http.request.remote.host}
+        # header_up X-Forwarded-Proto {http.request.scheme}
         
         # Health Checks
         lb_policy first
@@ -117,8 +117,8 @@ jackett. {$DOMAIN} {
 
     reverse_proxy jackett:9117 {
         # Robust proxy settings
-        # header_up X-Real-IP { http.request.remote.host}
-        # header_up X-Forwarded-Proto { http.request.scheme}
+        # header_up X-Real-IP {http.request.remote.host}
+        # header_up X-Forwarded-Proto {http.request.scheme}
    }
 }
 
@@ -156,8 +156,8 @@ dozzle. {$DOMAIN} {
    }
 
     reverse_proxy dozzle:8080 {
-        # header_up X-Real-IP { http.request.remote.host}
-        # header_up X-Forwarded-Proto { http.request.scheme}
+        # header_up X-Real-IP {http.request.remote.host}
+        # header_up X-Forwarded-Proto {http.request.scheme}
         # max_conns_per_host 50
         transport http {
             keepalive 5m
@@ -199,8 +199,8 @@ aiostreams. {$DOMAIN} {
    }
 
     reverse_proxy aiostreams:3000 {
-        # header_up X-Real-IP { http.request.remote.host}
-        # header_up X-Forwarded-Proto { http.request.scheme}
+        # header_up X-Real-IP {http.request.remote.host}
+        # header_up X-Forwarded-Proto {http.request.scheme}
         # max_conns_per_host 50
         transport http {
             keepalive 5m
@@ -242,8 +242,8 @@ ollama. {$DOMAIN} {
    }
 
     reverse_proxy ollama:11434 {
-        # header_up X-Real-IP { http.request.remote.host}
-        # header_up X-Forwarded-Proto { http.request.scheme}
+        # header_up X-Real-IP {http.request.remote.host}
+        # header_up X-Forwarded-Proto {http.request.scheme}
         transport http {
             keepalive 5m
        }
@@ -287,8 +287,8 @@ search. {$DOMAIN} {
    }
 
     reverse_proxy search-api:8080 {
-        # header_up X-Real-IP { http.request.remote.host}
-        # header_up X-Forwarded-Proto { http.request.scheme}
+        # header_up X-Real-IP {http.request.remote.host}
+        # header_up X-Forwarded-Proto {http.request.scheme}
         transport http {
             keepalive 5m
        }
@@ -332,8 +332,8 @@ chromadb. {$DOMAIN} {
    }
 
     reverse_proxy chromadb:8000 {
-        # header_up X-Real-IP { http.request.remote.host}
-        # header_up X-Forwarded-Proto { http.request.scheme}
+        # header_up X-Real-IP {http.request.remote.host}
+        # header_up X-Forwarded-Proto {http.request.scheme}
         transport http {
             keepalive 5m
        }
@@ -377,8 +377,8 @@ home. {$DOMAIN}, {$DOMAIN} {
    }
 
     reverse_proxy homepage:3000 {
-        # header_up X-Real-IP { http.request.remote.host}
-        # header_up X-Forwarded-Proto { http.request.scheme}
+        # header_up X-Real-IP {http.request.remote.host}
+        # header_up X-Forwarded-Proto {http.request.scheme}
         # max_conns_per_host 50
         transport http {
             keepalive 5m
@@ -576,8 +576,8 @@ home.{$DOMAIN}, {$DOMAIN} {
    }
 
     reverse_proxy homepage:3000 {
-        # header_up X-Real-IP { http.request.remote.host}
-        # header_up X-Forwarded-Proto { http.request.scheme}
+        # header_up X-Real-IP {http.request.remote.host}
+        # header_up X-Forwarded-Proto {http.request.scheme}
         # max_conns_per_host 50
         transport http {
             keepalive 5m
@@ -585,5 +585,6 @@ home.{$DOMAIN}, {$DOMAIN} {
    }
     request_body 20MB
 }
+
 
 
