@@ -412,7 +412,7 @@ catalogs.{$DOMAIN} {
         output stdout
     }
 
-    reverse_proxy host.docker.internal:3005 {
+    reverse_proxy vixsrc-catalogs-vixsrc-addon:3000 {
         transport http {
             keepalive 5m
         }
