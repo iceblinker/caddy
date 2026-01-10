@@ -167,7 +167,6 @@ dozzle.{$DOMAIN} {
 }
 
 # Example: AIOStreams
-aiostreams.{$DOMAIN} {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -177,6 +176,13 @@ aiostreams.{$DOMAIN} {
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
         Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
+        
+        # CORS Headers (Fix for Stremio/Browser access)
+        Access-Control-Allow-Origin "*"
+        Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+        Access-Control-Expose-Headers "Content-Length,Content-Range"
+
         -Server
         -X-Powered-By
     }
