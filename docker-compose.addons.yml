@@ -12,6 +12,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 90s
+
     volumes:
       - jackett_config:/config
     networks:
@@ -32,6 +34,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 90s
 
 volumes:
   jackett_config:
