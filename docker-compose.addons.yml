@@ -26,6 +26,7 @@ services:
     environment:
       - PORT=3000
       - TRUSTED_IPS=*
+      - HOST=0.0.0.0
     networks:
       - caddy_net
       - ai_network
