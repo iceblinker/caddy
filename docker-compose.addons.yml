@@ -28,6 +28,8 @@ services:
       - HOST=0.0.0.0
       - SECRET_KEY=35c6780e909247605971936c25a0b9435b6a5123d4e687890a1b2c3d4e5f6789
       - BASE_URL=https://aiostreams.138.199.156.62.sslip.io
+      - MEDIAFLOW_URL=http://mediaflow-proxy:8888
+      - MEDIAFLOW_API_PASSWORD=${API_PASSWORD}
 
     volumes:
       - aiostreams_data:/app/data
@@ -41,9 +43,47 @@ services:
       retries: 3
       start_period: 90s
 
+  corsario-db:
+    image: postgres:15-alpine
+    container_name: corsario-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=corsario
+      - POSTGRES_PASSWORD=corsario
+      - POSTGRES_DB=corsario
+    volumes:
+      - corsario_db_data:/var/lib/postgresql/data
+    networks:
+      - caddy_net
+      - ai_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U corsario" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  corsario:
+    build: ../corsario-viola
+    container_name: corsario
+    restart: unless-stopped
+    ports:
+      - "3000"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://corsario:corsario@corsario-db:5432/corsario
+      - PORT=3000
+    depends_on:
+      corsario-db:
+        condition: service_healthy
+    networks:
+      - caddy_net
+      - ai_network
+
 volumes:
   jackett_config:
   aiostreams_data:
+  corsario_db_data:
 
 
 networks:

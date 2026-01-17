@@ -497,7 +497,7 @@ corsario.{$DOMAIN} {
         output stdout
     }
 
-    reverse_proxy vixsrc-stream-provider:7000 {
+    reverse_proxy corsario:3000 {
         transport http {
             keepalive 5m
         }
@@ -591,3 +591,47 @@ home.{$DOMAIN}, {$DOMAIN} {
     }
     request_body 20MB
 }
+
+# Example: Streamvix
+# key request: streamvix.your-domain.com
+streamvix.{$DOMAIN} {
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+        Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
+        
+        # CORS Headers (Fix for Stremio/Browser access)
+        Access-Control-Allow-Origin "*"
+        Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+        Access-Control-Expose-Headers "Content-Length,Content-Range"
+
+        -Server
+        -X-Powered-By
+    }
+    
+    # Performance
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
+    encode @compressible zstd gzip
+
+    # Common Log
+    log {
+        format json
+        output stdout
+    }
+
+    reverse_proxy streamvix:7860 {
+        header_up X-Forwarded-Host {host}
+        transport http {
+            keepalive 5m
+        }
+    }
+}
+
