@@ -663,7 +663,7 @@ nzbdav.{$DOMAIN} {
         output stdout
     }
 
-    reverse_proxy nzbdav:3010 {
+    reverse_proxy nzbdav:3000 {
         transport http {
             keepalive 5m
         }
