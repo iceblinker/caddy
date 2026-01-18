@@ -729,10 +729,19 @@ usenetstreamer-en.{$DOMAIN} {
         -Server
         -X-Powered-By
     }
-    @compressible { path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml }
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
     encode @compressible zstd gzip
-    log { format json; output stdout }
-    reverse_proxy usenetstreamer-en:7005 { transport http { keepalive 5m } }
+    log {
+        format json
+        output stdout
+    }
+    reverse_proxy usenetstreamer-en:7005 {
+        transport http {
+            keepalive 5m
+        }
+    }
 }
 
 # Usenetstreamer - Italian Instance
@@ -752,10 +761,19 @@ usenetstreamer-it.{$DOMAIN} {
         -Server
         -X-Powered-By
     }
-    @compressible { path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml }
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
     encode @compressible zstd gzip
-    log { format json; output stdout }
-    reverse_proxy usenetstreamer-it:7005 { transport http { keepalive 5m } }
+    log {
+        format json
+        output stdout
+    }
+    reverse_proxy usenetstreamer-it:7005 {
+        transport http {
+            keepalive 5m
+        }
+    }
 }
 
 # Usenetstreamer - Spanish Instance
@@ -775,9 +793,18 @@ usenetstreamer-es.{$DOMAIN} {
         -Server
         -X-Powered-By
     }
-    @compressible { path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml }
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
     encode @compressible zstd gzip
-    log { format json; output stdout }
-    reverse_proxy usenetstreamer-es:7005 { transport http { keepalive 5m } }
+    log {
+        format json
+        output stdout
+    }
+    reverse_proxy usenetstreamer-es:7005 {
+        transport http {
+            keepalive 5m
+        }
+    }
 }
 
