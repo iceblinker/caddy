@@ -1,12 +1,12 @@
 {
     # Global Options
-    email {$ACME_EMAIL}
+    email { $ACME_EMAIL }
     
     # CrowdSec Integration
     order crowdsec first
     crowdsec {
         api_url http://crowdsec:8080
-        api_key {$CROWDSEC_API_KEY}
+        api_key { $CROWDSEC_API_KEY }
         ticker_interval 15s
     }
 
@@ -27,12 +27,12 @@
 
 # Example: Mediaflow Proxy
 # key request: mediaflow.your-domain.com
-mediaflow.{$DOMAIN} {
+mediaflow. { $DOMAIN } {
     # Active Security
     crowdsec
     rate_limit {
         zone mediaflow_zone {
-            key {remote_host}
+            key { remote_host }
             events 20
             window 1s
         }
@@ -83,7 +83,7 @@ mediaflow.{$DOMAIN} {
 
 # Example: Jackett
 # key request: jackett.your-domain.com
-jackett.{$DOMAIN} {
+jackett. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -124,7 +124,7 @@ jackett.{$DOMAIN} {
 
 # Example: Dozzle
 # key request: dozzle.your-domain.com
-dozzle.{$DOMAIN} {
+dozzle. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -168,7 +168,7 @@ dozzle.{$DOMAIN} {
 
 # Example: AIOStreams
 # Example: AIOStreams
-aiostreams.{$DOMAIN} {
+aiostreams. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -218,7 +218,7 @@ aiostreams.{$DOMAIN} {
 }
 
 # Example: Ollama
-ollama.{$DOMAIN} {
+ollama. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -260,7 +260,7 @@ ollama.{$DOMAIN} {
 }
 
 # Example: Search API
-search.{$DOMAIN} {
+search. { $DOMAIN } {
     # Note: search-api port is 8080 internal. We map to 8081 locally to avoid conflict if any, or just rely on subdomain.
     # User guide: http://search-api:8080
     
@@ -305,7 +305,7 @@ search.{$DOMAIN} {
 }
 
 # Example: ChromaDB
-chromadb.{$DOMAIN} {
+chromadb. { $DOMAIN } {
     # Note: chromadb port 8000. 
     # User guide: http://chromadb:8000
     
@@ -351,7 +351,7 @@ chromadb.{$DOMAIN} {
 
 # Example: Prowlarr (via Gluetun/VPN)
 # key request: prowlarr.your-domain.com
-prowlarr.{$DOMAIN} {
+prowlarr. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -387,7 +387,7 @@ prowlarr.{$DOMAIN} {
 
 # Example: VixSrc Catalogs Addon
 # key request: catalogs.your-domain.com
-catalogs.{$DOMAIN} {
+catalogs. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -429,7 +429,7 @@ catalogs.{$DOMAIN} {
 
 # Example: FlareSolverr
 # key request: flaresolverr.your-domain.com
-flaresolverr.{$DOMAIN} {
+flaresolverr. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -464,7 +464,7 @@ flaresolverr.{$DOMAIN} {
 
 # Example: Carsario / Viola
 # key request: corsario.your-domain.com
-corsario.{$DOMAIN} {
+corsario. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -506,7 +506,7 @@ corsario.{$DOMAIN} {
 
 # Example: My Stremio Addon
 # key request: stremio-addon.your-domain.com
-stremio-addon.{$DOMAIN} {
+stremio-addon. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -550,7 +550,7 @@ stremio-addon.{$DOMAIN} {
 # key request: home.your-domain.com or just localhost
 # Note: Since localhost overlaps with mediaflow (localhost:8080) and others, Caddy handles specific ports.
 # This block handles default ports if not matched elsewhere, or we can use specific domain.
-home.{$DOMAIN}, {$DOMAIN} {
+home. { $DOMAIN }, { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -594,7 +594,7 @@ home.{$DOMAIN}, {$DOMAIN} {
 
 # Example: Streamvix
 # key request: streamvix.your-domain.com
-streamvix.{$DOMAIN} {
+streamvix. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -628,7 +628,7 @@ streamvix.{$DOMAIN} {
     }
 
     reverse_proxy streamvix:7860 {
-        header_up X-Forwarded-Host {host}
+        header_up X-Forwarded-Host { host }
         transport http {
             keepalive 5m
         }
@@ -637,7 +637,7 @@ streamvix.{$DOMAIN} {
 
 # Example: NZBDav (WebDAV for Usenet)
 # key request: nzbdav.your-domain.com
-nzbdav.{$DOMAIN} {
+nzbdav. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -672,7 +672,7 @@ nzbdav.{$DOMAIN} {
 
 # Example: Usenetstreamer (Usenet Stremio Addon)
 # key request: usenetstreamer.your-domain.com
-usenetstreamer.{$DOMAIN} {
+usenetstreamer. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -713,7 +713,7 @@ usenetstreamer.{$DOMAIN} {
 }
 
 # Usenetstreamer - English Instance
-usenetstreamer-en.{$DOMAIN} {
+usenetstreamer-en. { $DOMAIN } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -745,7 +745,7 @@ usenetstreamer-en.{$DOMAIN} {
 }
 
 # Usenetstreamer - Italian Instance
-usenetstreamer-it.{$DOMAIN} {
+usenetstreamer-it. { $DOMAIN } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -777,7 +777,7 @@ usenetstreamer-it.{$DOMAIN} {
 }
 
 # Usenetstreamer - Spanish Instance
-usenetstreamer-es.{$DOMAIN} {
+usenetstreamer-es. { $DOMAIN } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -807,4 +807,47 @@ usenetstreamer-es.{$DOMAIN} {
         }
     }
 }
+
+# Sootio Addon
+# key request: sootio.your-domain.com
+sootio. { $DOMAIN } {
+    # Security Headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+        # Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'; frame-ancestors 'self'; object-src 'none';"
+        
+        # CORS Headers (Fix for Stremio/Browser access)
+        Access-Control-Allow-Origin "*"
+        Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+        Access-Control-Expose-Headers "Content-Length,Content-Range"
+
+        -Server
+        -X-Powered-By
+    }
+    
+    # Performance
+    @compressible {
+        path *.js *.css *.html *.json *.xml *.txt *.svg *.md *.yaml *.yml
+    }
+    encode @compressible zstd gzip
+
+    # Common Log
+    log {
+        format json
+        output stdout
+    }
+
+    reverse_proxy sootio:55771 {
+        transport http {
+            keepalive 5m
+        }
+    }
+}
+
 

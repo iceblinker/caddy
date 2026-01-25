@@ -80,10 +80,50 @@ services:
       - caddy_net
       - ai_network
 
+  nzbdav:
+    image: nzbdav/nzbdav:latest
+    container_name: nzbdav
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+    volumes:
+      - ./downloads:/data # Default mapping, user should update
+    networks:
+      - caddy_net
+
+  sootio-db:
+    image: postgres:15-alpine
+    container_name: sootio-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=sootio
+      - POSTGRES_PASSWORD=sootio
+      - POSTGRES_DB=sootio
+    volumes:
+      - sootio_db_data:/var/lib/postgresql/data
+    networks:
+      - caddy_net
+
+  sootio:
+    build: ../sootio-stremio-addon
+    container_name: sootio
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - ADDON_URL=https://sootio.${DOMAIN}
+      - PORT=55771
+      - DATABASE_URL=postgresql://sootio:sootio@sootio-db:5432/sootio
+    depends_on:
+      - sootio-db
+    networks:
+      - caddy_net
+
 volumes:
   jackett_config:
   aiostreams_data:
   corsario_db_data:
+  sootio_db_data:
 
 
 networks:
