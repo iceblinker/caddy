@@ -80,6 +80,38 @@ services:
       - caddy_net
       - ai_network
 
+  comet-db:
+    image: postgres:15-alpine
+    container_name: comet-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=comet
+      - POSTGRES_PASSWORD=comet
+      - POSTGRES_DB=comet
+    volumes:
+      - comet_db_data:/var/lib/postgresql/data
+    networks:
+      - caddy_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U comet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  comet:
+    build: ../comet
+    container_name: comet
+    restart: unless-stopped
+    env_file:
+      - ../comet/.env
+    environment:
+      - DATABASE_URL=postgresql://comet:comet@comet-db:5432/comet
+    depends_on:
+      comet-db:
+        condition: service_healthy
+    networks:
+      - caddy_net
+
   nzbdav:
     image: nzbdav/nzbdav:latest
     container_name: nzbdav
@@ -123,6 +155,7 @@ volumes:
   jackett_config:
   aiostreams_data:
   corsario_db_data:
+  comet_db_data:
   sootio_db_data:
 
 
