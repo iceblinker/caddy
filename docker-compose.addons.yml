@@ -109,8 +109,6 @@ services:
     depends_on:
       comet-db:
         condition: service_healthy
-    links:
-      - comet-db
     networks:
       - caddy_net
 
