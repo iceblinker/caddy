@@ -18,6 +18,7 @@ services:
       - jackett_config:/config
     networks:
       - caddy_net
+      - ai_network
 
   aiostreams:
     image: ghcr.io/viren070/aiostreams:latest
@@ -92,6 +93,7 @@ services:
       - comet_db_data:/var/lib/postgresql/data
     networks:
       - caddy_net
+      - ai_network
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U comet" ]
       interval: 10s
@@ -111,6 +113,7 @@ services:
         condition: service_healthy
     networks:
       - caddy_net
+      - ai_network
 
   nzbdav:
     image: nzbdav/nzbdav:latest
@@ -122,6 +125,7 @@ services:
       - ./downloads:/data # Default mapping, user should update
     networks:
       - caddy_net
+      - ai_network
 
   sootio-db:
     image: postgres:15-alpine
@@ -135,9 +139,10 @@ services:
       - sootio_db_data:/var/lib/postgresql/data
     networks:
       - caddy_net
+      - ai_network
 
   sootio:
-    build: ../sootio-stremio-addon
+    build: ../sootio
     container_name: sootio
     restart: unless-stopped
     env_file:
@@ -146,10 +151,14 @@ services:
       - ADDON_URL=https://sootio.${DOMAIN}
       - PORT=55771
       - DATABASE_URL=postgresql://sootio:sootio@sootio-db:5432/sootio
+      - FLARESOLVERR_URL=http://gluetun:8191
+      - LOG_LEVEL=debug
+    command: [ "node", "--max-old-space-size=2048", "--expose-gc", "cluster.js" ]
     depends_on:
       - sootio-db
     networks:
       - caddy_net
+      - ai_network
 
 volumes:
   jackett_config:
