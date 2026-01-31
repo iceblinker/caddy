@@ -1,12 +1,12 @@
-{
+﻿{
     # Global Options
-    email {$ACME_EMAIL}
+    email { $ACME_EMAIL }
     
     # CrowdSec Integration
     order crowdsec first
     crowdsec {
         api_url http://crowdsec:8080
-        api_key {$CROWDSEC_API_KEY}
+        api_key { $CROWDSEC_API_KEY }
         ticker_interval 15s
     }
 
@@ -27,12 +27,12 @@
 
 # Example: Mediaflow Proxy
 # key request: mediaflow.your-domain.com
-mediaflow.{$DOMAIN} {
+mediaflow. { $DOMAIN } {
     # Active Security
     crowdsec
     rate_limit {
         zone mediaflow_zone {
-            key {remote_host}
+            key { remote_host }
             events 20
             window 1s
         }
@@ -62,7 +62,7 @@ mediaflow.{$DOMAIN} {
 
 # Example: Jackett
 # key request: jackett.your-domain.com
-jackett.{$DOMAIN} {
+jackett. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -89,7 +89,7 @@ jackett.{$DOMAIN} {
 
 # Example: Dozzle
 # key request: dozzle.your-domain.com
-dozzle.{$DOMAIN} {
+dozzle. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -113,7 +113,7 @@ dozzle.{$DOMAIN} {
 
 # Example: AIOStreams
 # Example: AIOStreams
-aiostreams.{$DOMAIN} {
+aiostreams. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -148,12 +148,13 @@ aiostreams.{$DOMAIN} {
 }
 
 # Example: Comet Stremio Addon
-comet.{$DOMAIN} {
+comet. { $DOMAIN } {
+    import cors
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
-        X-Frame-Options "SAMEORIGIN"
+        X-Frame-Options "ALLOWALL"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
@@ -175,7 +176,7 @@ comet.{$DOMAIN} {
 }
 
 # Example: Ollama
-ollama.{$DOMAIN} {
+ollama. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -197,7 +198,7 @@ ollama.{$DOMAIN} {
 }
 
 # Example: Search API
-search.{$DOMAIN} {
+search. { $DOMAIN } {
     # Note: search-api port is 8080 internal. We map to 8081 locally to avoid conflict if any, or just rely on subdomain.
     # User guide: http://search-api:8080
         
@@ -222,7 +223,7 @@ search.{$DOMAIN} {
 }
 
 # Example: ChromaDB
-chromadb.{$DOMAIN} {
+chromadb. { $DOMAIN } {
     # Note: chromadb port 8000. 
     # User guide: http://chromadb:8000
         
@@ -248,7 +249,7 @@ chromadb.{$DOMAIN} {
 
 # Example: Prowlarr (via Gluetun/VPN)
 # key request: prowlarr.your-domain.com
-prowlarr.{$DOMAIN} {
+prowlarr. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -276,12 +277,13 @@ prowlarr.{$DOMAIN} {
 
 # Example: VixSrc Catalogs Addon
 # key request: catalogs.your-domain.com
-catalogs.{$DOMAIN} {
+catalogs. { $DOMAIN } {
+    import cors
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
-        X-Frame-Options "SAMEORIGIN"
+        X-Frame-Options "ALLOWALL"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
@@ -302,12 +304,13 @@ catalogs.{$DOMAIN} {
 }
 
 # Example: Leviathan Stremio Addon
-leviathan.{$DOMAIN} {
+leviathan. { $DOMAIN } {
+    import cors
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
-        X-Frame-Options "SAMEORIGIN"
+        X-Frame-Options "ALLOWALL"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
@@ -329,7 +332,7 @@ leviathan.{$DOMAIN} {
 
 # Example: FlareSolverr
 # key request: flaresolverr.your-domain.com
-flaresolverr.{$DOMAIN} {
+flaresolverr. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -356,12 +359,13 @@ flaresolverr.{$DOMAIN} {
 
 # Example: Sootio
 # key request: sootio.your-domain.com
-sootio.{$DOMAIN} {
+sootio. { $DOMAIN } {
+    import cors
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
-        X-Frame-Options "SAMEORIGIN"
+        X-Frame-Options "ALLOWALL"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
@@ -383,12 +387,13 @@ sootio.{$DOMAIN} {
 
 # Example: Streamvix
 # key request: streamvix.your-domain.com
-streamvix.{$DOMAIN} {
+streamvix. { $DOMAIN } {
+    import cors
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
-        X-Frame-Options "SAMEORIGIN"
+        X-Frame-Options "ALLOWALL"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
@@ -410,7 +415,7 @@ streamvix.{$DOMAIN} {
 
 # Example: NZBDav
 # key request: nzbdav.your-domain.com
-nzbdav.{$DOMAIN} {
+nzbdav. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -442,7 +447,7 @@ nzbdav.{$DOMAIN} {
 
 # Example: UsenetStreamer
 # key request: usenetstreamer.your-domain.com
-usenetstreamer.{$DOMAIN} {
+usenetstreamer. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -469,7 +474,7 @@ usenetstreamer.{$DOMAIN} {
     
 # Example: Corsario Viola
 # key request: corsario.your-domain.com
-corsario.{$DOMAIN} {
+corsario. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -496,7 +501,7 @@ corsario.{$DOMAIN} {
 
 # Example: UsenetStreamer IT
 # key request: usenetstreamer-it.your-domain.com
-usenetstreamer-it.{$DOMAIN} {
+usenetstreamer-it. { $DOMAIN } {
     # Security Headers
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
