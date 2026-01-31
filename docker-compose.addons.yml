@@ -178,6 +178,16 @@ services:
       - caddy_net
       - ai_network
 
+  vixsrc-addon:
+    build: ../vixsrc-catalogs
+    container_name: vixsrc-addon
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+    networks:
+      - caddy_net
+      - ai_network
+
 volumes:
   jackett_config:
   aiostreams_data:
