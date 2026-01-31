@@ -1,25 +1,19 @@
-﻿{
-    # Global Options
-    email { $ACME_EMAIL }
+﻿{# Global Options
+    email {$ACME_EMAIL}
     
     # CrowdSec Integration
     order crowdsec first
-    crowdsec {
-        api_url http://crowdsec:8080
-        api_key { $CROWDSEC_API_KEY }
-        ticker_interval 15s
-    }
+    crowdsec {api_url http://crowdsec:8080
+        api_key {$CROWDSEC_API_KEY}
+        ticker_interval 15s}
 
     # Global Rate Limiting Definition
     order rate_limit before basic_auth
     
     # Global Logging (JSON for parsing tools)
-    log {
-        format json
+    log {format json
         output stdout
-        level INFO
-    }
-}
+        level INFO}}
 
 # ------------------------------------------------------------------------------
 # SITES (Fully Expanded / No Imports for Max Robustness)
@@ -27,20 +21,14 @@
 
 # Example: Mediaflow Proxy
 # key request: mediaflow.your-domain.com
-mediaflow. { $DOMAIN } {
-    # Active Security
+mediaflow.{$DOMAIN} {# Active Security
     crowdsec
-    rate_limit {
-        zone mediaflow_zone {
-            key { remote_host }
+    rate_limit {zone mediaflow_zone {key {remote_host}
             events 20
-            window 1s
-        }
-    }
+            window 1s}}
 
     # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
@@ -56,43 +44,31 @@ mediaflow. { $DOMAIN } {
         lb_policy first
         health_uri /
         health_interval 30s
-        health_timeout 5s
-    }
-}
+        health_timeout 5s}}
 
 # Example: Jackett
 # key request: jackett.your-domain.com
-jackett. { $DOMAIN } {
-    # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+jackett.{$DOMAIN} {# Security Headers
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy jackett:9117 {
-        # Robust proxy settings
+    reverse_proxy jackett:9117 {# Robust proxy settings
         # header_up X-Real-IP {http.request.remote.host}
-        # header_up X-Forwarded-Proto {http.request.scheme}
-    }
-}
+        # header_up X-Forwarded-Proto {http.request.scheme}}}
 
 # Example: Dozzle
 # key request: dozzle.your-domain.com
-dozzle. { $DOMAIN } {
-    # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+dozzle.{$DOMAIN} {# Security Headers
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
@@ -104,82 +80,54 @@ dozzle. { $DOMAIN } {
         # header_up X-Real-IP {http.request.remote.host}
         # header_up X-Forwarded-Proto {http.request.scheme}
         # max_conns_per_host 50
-        transport http {
-            keepalive 5m
-        }
-    }
-    request_body 20MB
-}
+        transport http {keepalive 5m}}
+    request_body 20MB}
 
 # Example: AIOStreams
 # Example: AIOStreams
-aiostreams. { $DOMAIN } {
-    # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+aiostreams.{$DOMAIN} {# Security Headers
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
-    @static {
-        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp
-    }
+    @static {path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.webp}
     header @static Cache-Control "public, max-age=31536000"
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy aiostreams:3000 {
-        # header_up X-Real-IP {http.request.remote.host}
+    reverse_proxy aiostreams:3000 {# header_up X-Real-IP {http.request.remote.host}
         # header_up X-Forwarded-Proto {http.request.scheme}
         # max_conns_per_host 50
-        transport http {
-            keepalive 5m
-        }
-    }
-    request_body 20MB
-}
+        transport http {keepalive 5m}}
+    request_body 20MB}
 
 # Example: Comet Stremio Addon
-comet. { $DOMAIN } {
-    import cors
+comet.{$DOMAIN} {import cors
     # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "ALLOWALL"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
     encode zstd gzip
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy comet:8000 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy comet:8000 {transport http {keepalive 5m}}}
 
 # Example: Ollama
-ollama. { $DOMAIN } {
-    # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+ollama.{$DOMAIN} {# Security Headers
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
@@ -190,21 +138,15 @@ ollama. { $DOMAIN } {
         # Proxy specific
         # header_up X-Real-IP {http.request.remote.host}
         # header_up X-Forwarded-Proto {http.request.scheme}
-        transport http {
-            keepalive 5m
-        }
-    }
-    request_body 20MB
-}
+        transport http {keepalive 5m}}
+    request_body 20MB}
 
 # Example: Search API
-search. { $DOMAIN } {
-    # Note: search-api port is 8080 internal. We map to 8081 locally to avoid conflict if any, or just rely on subdomain.
+search.{$DOMAIN} {# Note: search-api port is 8080 internal. We map to 8081 locally to avoid conflict if any, or just rely on subdomain.
     # User guide: http://search-api:8080
         
     # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
@@ -215,21 +157,15 @@ search. { $DOMAIN } {
         # Proxy specific
         # header_up X-Real-IP {http.request.remote.host}
         # header_up X-Forwarded-Proto {http.request.scheme}
-        transport http {
-            keepalive 5m
-        }
-    }
-    request_body 20MB
-}
+        transport http {keepalive 5m}}
+    request_body 20MB}
 
 # Example: ChromaDB
-chromadb. { $DOMAIN } {
-    # Note: chromadb port 8000. 
+chromadb.{$DOMAIN} {# Note: chromadb port 8000. 
     # User guide: http://chromadb:8000
         
     # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
@@ -240,291 +176,185 @@ chromadb. { $DOMAIN } {
         # Proxy specific
         # header_up X-Real-IP {http.request.remote.host}
         # header_up X-Forwarded-Proto {http.request.scheme}
-        transport http {
-            keepalive 5m
-        }
-    }
-    request_body 20MB
-}
+        transport http {keepalive 5m}}
+    request_body 20MB}
 
 # Example: Prowlarr (via Gluetun/VPN)
 # key request: prowlarr.your-domain.com
-prowlarr. { $DOMAIN } {
-    # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+prowlarr.{$DOMAIN} {# Security Headers
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
     # Proxy ID: 44
-    reverse_proxy gluetun:9696 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy gluetun:9696 {transport http {keepalive 5m}}}
 
 # Example: VixSrc Catalogs Addon
 # key request: catalogs.your-domain.com
-catalogs. { $DOMAIN } {
-    import cors
+catalogs.{$DOMAIN} {import cors
     # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "ALLOWALL"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy vixsrc-addon:3000 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy vixsrc-addon:3000 {transport http {keepalive 5m}}}
 
 # Example: Leviathan Stremio Addon
-leviathan. { $DOMAIN } {
-    import cors
+leviathan.{$DOMAIN} {import cors
     # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "ALLOWALL"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy leviathan:7000 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy leviathan:7000 {transport http {keepalive 5m}}}
 
 # Example: FlareSolverr
 # key request: flaresolverr.your-domain.com
-flaresolverr. { $DOMAIN } {
-    # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+flaresolverr.{$DOMAIN} {# Security Headers
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy flaresolverr:8191 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy flaresolverr:8191 {transport http {keepalive 5m}}}
 
 # Example: Sootio
 # key request: sootio.your-domain.com
-sootio. { $DOMAIN } {
-    import cors
+sootio.{$DOMAIN} {import cors
     # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "ALLOWALL"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy sootio:3000 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy sootio:3000 {transport http {keepalive 5m}}}
 
 # Example: Streamvix
 # key request: streamvix.your-domain.com
-streamvix. { $DOMAIN } {
-    import cors
+streamvix.{$DOMAIN} {import cors
     # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "ALLOWALL"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy streamvix:7860 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy streamvix:7860 {transport http {keepalive 5m}}}
 
 # Example: NZBDav
 # key request: nzbdav.your-domain.com
-nzbdav. { $DOMAIN } {
-    # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+nzbdav.{$DOMAIN} {# Security Headers
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
         
     # Authentication
-    basic_auth / {
-        admin $2y$05$1v1lXF0K1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1 # Example hash
-    }
+    basic_auth / {admin $2y$05$1v1lXF0K1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1 # Example hash}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy nzbdav:80 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy nzbdav:80 {transport http {keepalive 5m}}}
 
 # Example: UsenetStreamer
 # key request: usenetstreamer.your-domain.com
-usenetstreamer. { $DOMAIN } {
-    # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+usenetstreamer.{$DOMAIN} {# Security Headers
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy usenetstreamer:8080 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy usenetstreamer:8080 {transport http {keepalive 5m}}}
     
 # Example: Corsario Viola
 # key request: corsario.your-domain.com
-corsario. { $DOMAIN } {
-    # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+corsario.{$DOMAIN} {# Security Headers
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy corsario:3000 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy corsario:3000 {transport http {keepalive 5m}}}
 
 # Example: UsenetStreamer IT
 # key request: usenetstreamer-it.your-domain.com
-usenetstreamer-it. { $DOMAIN } {
-    # Security Headers
-    header {
-        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+usenetstreamer-it.{$DOMAIN} {# Security Headers
+    header {Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
         X-Frame-Options "SAMEORIGIN"
         X-XSS-Protection "1; mode=block"
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
-        X-Robots-Tag "noindex, nofollow"
-    }
+        X-Robots-Tag "noindex, nofollow"}
 
     # Common Log
-    log {
-        format json
-        output stdout
-    }
+    log {format json
+        output stdout}
 
-    reverse_proxy usenetstreamer-it:8081 {
-        transport http {
-            keepalive 5m
-        }
-    }
-}
+    reverse_proxy usenetstreamer-it:8081 {transport http {keepalive 5m}}}
 
 
 
