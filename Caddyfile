@@ -159,7 +159,7 @@ comet. {$DOMAIN} {
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
         X-Robots-Tag "noindex, nofollow"
     }
-    encode @compressible zstd gzip
+    encode zstd gzip
 
     # Common Log
     log {
@@ -520,5 +520,6 @@ usenetstreamer-it. {$DOMAIN} {
         }
     }
 }
+
 
 
