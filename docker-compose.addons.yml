@@ -162,6 +162,22 @@ services:
       - caddy_net
       - ai_network
 
+  leviathan:
+    build: ../leviathan
+    container_name: leviathan
+    restart: unless-stopped
+    ports:
+      - "7001:7000"
+    environment:
+      - PORT=7000
+      - NODE_ENV=production
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    networks:
+      - caddy_net
+      - ai_network
+
 volumes:
   jackett_config:
   aiostreams_data:
