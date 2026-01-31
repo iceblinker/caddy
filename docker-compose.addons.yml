@@ -152,6 +152,8 @@ services:
       - PORT=55771
       - DATABASE_URL=postgresql://sootio:sootio@sootio-db:5432/sootio
       - FLARESOLVERR_URL=http://gluetun:8191
+      - SCRAPER_TIMEOUT=60000
+      - SEARCH_TIMEOUT_MS=65000
       - LOG_LEVEL=debug
     command: [ "node", "--max-old-space-size=2048", "--expose-gc", "cluster.js" ]
     depends_on:
