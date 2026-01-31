@@ -335,17 +335,7 @@ flaresolverr.{$DOMAIN} {
     }
 }
 
-log {
-    format json
-    output stdout
-}
 
-reverse_proxy flaresolverr:8191 {
-    transport http {
-        keepalive 5m
-    }
-}
-}
 
 # Example: Sootio
 sootio.{$DOMAIN} {
