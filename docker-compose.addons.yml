@@ -149,7 +149,7 @@ services:
       - .env
     environment:
       - ADDON_URL=https://sootio.${DOMAIN}
-      - PORT=55771
+      - PORT=3000
       - DATABASE_URL=postgresql://sootio:sootio@sootio-db:5432/sootio
       - FLARESOLVERR_URL=http://gluetun:8191
       - SCRAPER_TIMEOUT=60000
