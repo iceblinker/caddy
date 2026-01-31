@@ -50,7 +50,7 @@ mediaflow. {$DOMAIN } {
     crowdsec
     rate_limit {
         zone mediaflow_zone {
-            key { remote_host }
+            key {remote_host}
             events 20
             window 1s
         }
