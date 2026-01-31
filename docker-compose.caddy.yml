@@ -71,6 +71,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - caddy_net
+      - ai_network
     healthcheck:
       test: [ "CMD", "/dozzle", "healthcheck" ]
       interval: 30s
@@ -87,6 +88,7 @@ services:
     command: --interval 86400 --cleanup
     networks:
       - caddy_net
+      - ai_network
 
   crowdsec:
     image: crowdsecurity/crowdsec:latest
@@ -98,6 +100,7 @@ services:
       - crowdsec_config:/etc/crowdsec
     networks:
       - caddy_net
+      - ai_network
     restart: unless-stopped
     logging: *logging
     labels:
@@ -114,6 +117,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - caddy_net
+      - ai_network
 
 volumes:
   caddy_data:
