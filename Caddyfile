@@ -50,7 +50,7 @@ mediaflow.{$DOMAIN} {
     crowdsec
     rate_limit {
         zone mediaflow_zone {
-            key {remote_host}
+            key { remote_host }
             events 20
             window 1s
         }
@@ -409,8 +409,8 @@ nzbdav.{$DOMAIN} {
     }
 }
 
-# Example: UsenetStreamer
-usenetstreamer.{$DOMAIN} {
+# Example: UsenetStreamer EN
+usenetstreamer-en.{$DOMAIN}, usenetstreamer.{$DOMAIN} {
     import cors
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -427,7 +427,7 @@ usenetstreamer.{$DOMAIN} {
         output stdout
     }
 
-    reverse_proxy usenetstreamer:8080 {
+    reverse_proxy usenetstreamer-en:7005 {
         transport http {
             keepalive 5m
         }
@@ -458,6 +458,31 @@ corsario.{$DOMAIN} {
     }
 }
 
+# Example: UsenetStreamer ES
+usenetstreamer-es.{$DOMAIN} {
+    import cors
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+        X-Robots-Tag "noindex, nofollow"
+    }
+
+    log {
+        format json
+        output stdout
+    }
+
+    reverse_proxy usenetstreamer-es:7005 {
+        transport http {
+            keepalive 5m
+        }
+    }
+}
+
 # Example: UsenetStreamer IT
 usenetstreamer-it.{$DOMAIN} {
     import cors
@@ -476,7 +501,7 @@ usenetstreamer-it.{$DOMAIN} {
         output stdout
     }
 
-    reverse_proxy usenetstreamer-it:8081 {
+    reverse_proxy usenetstreamer-it:7005 {
         transport http {
             keepalive 5m
         }
