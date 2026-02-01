@@ -254,7 +254,7 @@ prowlarr.{$DOMAIN} {
         output stdout
     }
 
-    reverse_proxy prowlarr:9696 {
+    reverse_proxy gluetun:9696 {
         transport http {
             keepalive 5m
         }
@@ -328,7 +328,7 @@ flaresolverr.{$DOMAIN} {
         output stdout
     }
 
-    reverse_proxy flaresolverr:8191 {
+    reverse_proxy gluetun:8191 {
         transport http {
             keepalive 5m
         }
