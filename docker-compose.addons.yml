@@ -147,6 +147,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+      - ../sootio/.env
     environment:
       - ADDON_URL=https://sootio.${DOMAIN}
       - PORT=3000
@@ -155,6 +156,7 @@ services:
       - SCRAPER_TIMEOUT=60000
       - SEARCH_TIMEOUT_MS=65000
       - LOG_LEVEL=debug
+      - CACHE_BACKEND=postgres
     command: [ "node", "--max-old-space-size=2048", "--expose-gc", "cluster.js" ]
     depends_on:
       - sootio-db
