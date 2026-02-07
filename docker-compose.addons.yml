@@ -157,6 +157,7 @@ services:
       - SEARCH_TIMEOUT_MS=65000
       - LOG_LEVEL=debug
       - CACHE_BACKEND=postgres
+      - DEBRID_HTTP_PROXY=http://gluetun:8191
     command: [ "node", "--max-old-space-size=2048", "--expose-gc", "cluster.js" ]
     depends_on:
       - sootio-db
