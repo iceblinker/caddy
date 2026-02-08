@@ -370,6 +370,8 @@ sootio.{$DOMAIN} {
 
 # Example: Streamvix
 streamvix.{$DOMAIN} {
+    import cors
+    
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -378,6 +380,12 @@ streamvix.{$DOMAIN} {
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
         X-Robots-Tag "noindex, nofollow"
+        
+        # Remove duplicate CORS headers from addon responses
+        -Access-Control-Allow-Origin
+        -Access-Control-Allow-Methods  
+        -Access-Control-Allow-Headers
+        -Access-Control-Max-Age
     }
 
     log {
