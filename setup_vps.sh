@@ -61,7 +61,7 @@ echo "🧹 Cleaning up old mediaflow-proxy..."
 docker rm -f mediaflow-proxy >/dev/null 2>&1 || true
 
 # Use --remove-orphans to cleanup old containers and avoid name conflicts
-docker-compose -f docker-compose.caddy.yml -f docker-compose.mediaflow.yml up -d --remove-orphans --force-recreate
+docker-compose -f docker-compose.caddy.yml -f docker-compose.mediaflow.yml -f docker-compose.addons.yml up -d --remove-orphans --force-recreate
 
 echo "🎉 Deployment Complete!"
 echo "Check status with: docker ps"

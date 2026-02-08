@@ -182,7 +182,7 @@ services:
       - ai_network
 
   vixsrc-addon:
-    build: ../catalogs-vixsrc
+    build: ../vixsrc-catalogs
     container_name: vixsrc-addon
     restart: unless-stopped
     environment:
