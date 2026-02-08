@@ -380,12 +380,6 @@ streamvix.{$DOMAIN} {
         Referrer-Policy "strict-origin-when-cross-origin"
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
         X-Robots-Tag "noindex, nofollow"
-        
-        # Remove duplicate CORS headers from addon responses
-        -Access-Control-Allow-Origin
-        -Access-Control-Allow-Methods  
-        -Access-Control-Allow-Headers
-        -Access-Control-Max-Age
     }
 
     log {
@@ -394,6 +388,12 @@ streamvix.{$DOMAIN} {
     }
 
     reverse_proxy streamvix:7860 {
+        # Remove CORS headers from addon responses before Caddy adds its own
+        header_down -Access-Control-Allow-Origin
+        header_down -Access-Control-Allow-Methods
+        header_down -Access-Control-Allow-Headers
+        header_down -Access-Control-Max-Age
+        
         transport http {
             keepalive 5m
         }
