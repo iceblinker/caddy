@@ -217,7 +217,7 @@ services:
     environment:
       - PORT=3003
     volumes:
-      - ~/catalogs-vixsrc:/app
+      - ~/catalogs-vixsrc/catalog.db:/app/catalog.db
     networks:
       - caddy_net
       - ai_network
