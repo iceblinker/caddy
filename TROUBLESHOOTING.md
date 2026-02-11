@@ -41,31 +41,48 @@ This document tracks known issues, fixes, and configuration details for the iceb
 
 ## 🐛 Known Issues & Fixes
 
-### Issue #1: VixSrc 503 Service Unavailable (Feb 2026)
+### Issue #1: VixSrc 503 Service Unavailable & Empty Catalogs (Feb 2026)
 
 **Symptom:**
 - Intermittent 503 errors when accessing `catalogs.iceblinker.vip`
 - Some requests returned 404 with `uvicorn` headers instead of `Express`
-- Caddy health checks failing with "unexpected status code 404"
+- Caddy container crash-looping with syntax errors
+- Catalogs returning empty `{"metas":[]}` even when service was responding
 
-**Root Cause:**
-Docker DNS conflict. Three services were using **port 3000** on the same network (`caddy_net`):
-- `aiostreams` (Python/uvicorn)
-- `sootio` (Node.js)
-- `vixsrc-addon` (Node.js/Express)
+**Root Causes:**
+1. **Docker DNS conflict**: Three services were using **port 3000** on the same network (`caddy_net`):
+   - `aiostreams` (Python/uvicorn)
+   - `sootio` (Node.js)
+   - `vixsrc-addon` (Node.js/Express)
+   
+   When Caddy tried to resolve `vixsrc-addon:3000`, Docker's DNS sometimes returned the wrong container's IP.
 
-When Caddy tried to resolve `vixsrc-addon:3000`, Docker's DNS sometimes returned the wrong container's IP.
+2. **Caddy syntax error**: Attempted to use `health_status 2xx 404` to accept both 200 and 404 responses, but Caddy v2.9 doesn't support multiple status codes in this format, causing container crash loops.
+
+3. **Missing database mount**: Database file `catalog.db` exists on VPS at `~/catalogs-vixsrc/catalog.db` but wasn't mounted into the container, causing empty catalog responses.
 
 **Fix:**
-1. Changed `vixsrc-addon` port from `3000` → `3003`
+1. Changed `vixsrc-addon` port from `3000` → `3003` to eliminate DNS conflict
 2. Updated `Caddyfile` reverse proxy: `vixsrc-addon:3000` → `vixsrc-addon:3003`
-3. Updated Caddy health check to accept `404` status (temporary workaround for missing dashboard)
-4. Redeployed container and reloaded Caddy
+3. Fixed Caddy syntax: Changed `health_status 2xx 404` → `health_status 2xx`
+4. Rebuilt Caddy container with corrected Caddyfile
+5. Added volume mount: `~/catalogs-vixsrc/catalog.db:/app/catalog.db` to `docker-compose.addons.yml`
+6. Redeployed vixsrc-addon container with database access
 
-**Commit:** `b119380` (Feb 11, 2026)
+**Commits:** 
+- `b119380` - Port change (Feb 11, 2026)
+- `f4474cc` - Caddy syntax fix (Feb 11, 2026)
+- `a8d334f` - Database mount (Feb 11, 2026)
+
+**Result:** ✅ Fully Resolved
+- Service returns 200 OK
+- Requests correctly routed to vixsrc-addon Express server
+- Catalogs populated with full movie/series metadata
 
 **Prevention:**
 - Always use unique ports for services on the same network
+- Test Caddy configuration syntax before deploying (`caddy validate`)
+- Ensure database files/volumes are mounted before first deployment
 - Document port assignments in this file before deploying new services
 
 ---
