@@ -215,7 +215,7 @@ services:
     container_name: vixsrc-addon
     restart: unless-stopped
     environment:
-      - PORT=3000
+      - PORT=3003
     networks:
       - caddy_net
       - ai_network

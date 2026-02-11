@@ -299,7 +299,7 @@ catalogs.{$DOMAIN} {
         output stdout
     }
 
-    reverse_proxy vixsrc-addon:3000 {
+    reverse_proxy vixsrc-addon:3003 {
         transport http {
             keepalive 5m
             dial_timeout 2s
