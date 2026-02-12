@@ -1,12 +1,12 @@
 {
     # Global Options
-    email {$ACME_EMAIL}
+    email { $ACME_EMAIL }
     
     # CrowdSec Integration
     order crowdsec first
     crowdsec {
         api_url http://crowdsec:8080
-        api_key {$CROWDSEC_API_KEY}
+        api_key { $CROWDSEC_API_KEY }
         ticker_interval 15s
     }
 
@@ -45,8 +45,7 @@
 # ------------------------------------------------------------------------------
 
 # Example: Mediaflow Proxy
-mediaflow. { $DOMAIN } {
-    import cors
+mediaflow. {$DOMAIN} {
     crowdsec
     rate_limit {
         zone mediaflow_zone {
@@ -453,7 +452,7 @@ usenetstreamer-en. { $DOMAIN }, usenetstreamer. { $DOMAIN } {
     }
 }
     
-# Example: Corsario Viola
+# Example :  Corsar io Viola
 corsario. { $DOMAIN } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -477,7 +476,7 @@ corsario. { $DOMAIN } {
     }
 }
 
-# Example: UsenetStreamer ES
+# Example: UsenetS t reamer  ES
 usenetstreamer-es. { $DOMAIN } {
     import cors
     header {
@@ -502,7 +501,7 @@ usenetstreamer-es. { $DOMAIN } {
     }
 }
 
-# Example: UsenetStreamer IT
+# Example: UsenetS t reamer  IT
 usenetstreamer-it. { $DOMAIN } {
     import cors
     header {
