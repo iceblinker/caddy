@@ -46,7 +46,6 @@
 
 # Example: Mediaflow Proxy
 mediaflow.{$DOMAIN} {
-    import cors
     crowdsec
     rate_limit {
         zone mediaflow_zone {
