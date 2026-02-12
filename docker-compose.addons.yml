@@ -215,7 +215,7 @@ services:
     container_name: vixsrc-addon
     restart: unless-stopped
     environment:
-      - PORT=3003
+      - PORT=3000
     volumes:
       - ~/catalogs-vixsrc/catalog.db:/app/catalog.db
     networks:
