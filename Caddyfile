@@ -1,12 +1,12 @@
-{
+﻿{
     # Global Options
-    email {$ACME_EMAIL}
+    email { $ACME_EM A I L }
     
     # CrowdSec Integration
     order crowdsec first
     crowdsec {
         api_url http://crowdsec:8080
-        api_key {$CROWDSEC_API_KEY}
+        api_key { $CROWDSEC_API_ K E Y }
         ticker_interval 15s
     }
 
@@ -45,7 +45,8 @@
 # ------------------------------------------------------------------------------
 
 # Example: Mediaflow Proxy
-mediaflow.{$DOMAIN} {
+mediaflow. { $DOM A I N } {
+    import cors
     crowdsec
     rate_limit {
         zone mediaflow_zone {
@@ -70,7 +71,7 @@ mediaflow.{$DOMAIN} {
 }
 
 # Example: Jackett
-jackett.{$DOMAIN} {
+jackett. { $DOM A I N } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -94,7 +95,7 @@ jackett.{$DOMAIN} {
 }
 
 # Example: Dozzle
-dozzle.{$DOMAIN} {
+dozzle. { $DOM A I N } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -114,7 +115,7 @@ dozzle.{$DOMAIN} {
 }
 
 # Example: AIOStreams
-aiostreams.{$DOMAIN} {
+$DOM A I N } {
     import cors
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -145,7 +146,7 @@ aiostreams.{$DOMAIN} {
 }
 
 # Example: Comet Stremio Addon
-comet.{$DOMAIN} {
+comet. { $DOM A I N } {
     import cors
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -171,7 +172,7 @@ comet.{$DOMAIN} {
 }
 
 # Example: Ollama
-ollama.{$DOMAIN} {
+ollama. { $DOM A I N } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -191,7 +192,7 @@ ollama.{$DOMAIN} {
 }
 
 # Example: Search API
-search.{$DOMAIN} {
+search. { $DOM A I N } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -211,7 +212,7 @@ search.{$DOMAIN} {
 }
 
 # Example: ChromaDB
-chromadb.{$DOMAIN} {
+chromadb. { $DOM A I N } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -231,7 +232,7 @@ chromadb.{$DOMAIN} {
 }
 
 # Example: Prowlarr
-prowlarr.{$DOMAIN} {
+prowlarr. { $DOM A I N } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -255,7 +256,7 @@ prowlarr.{$DOMAIN} {
 }
 
 # Example: VixSrc Catalogs Addon
-catalogs.{$DOMAIN} {
+catalogs. { $DOM A I N } {
     import cors
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -292,7 +293,7 @@ catalogs.{$DOMAIN} {
 }
 
 # Example: Leviathan Stremio Addon
-leviathan.{$DOMAIN} {
+leviathan. { $DOM A I N } {
     import cors
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -317,7 +318,7 @@ leviathan.{$DOMAIN} {
 }
 
 # Example: FlareSolverr
-flaresolverr.{$DOMAIN} {
+flaresolverr. { $DOM A I N } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -343,7 +344,7 @@ flaresolverr.{$DOMAIN} {
 
 
 # Example: Sootio
-sootio.{$DOMAIN} {
+sootio. { $DOM A I N } {
     import cors
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -368,7 +369,7 @@ sootio.{$DOMAIN} {
 }
 
 # Example: Streamvix
-streamvix.{$DOMAIN} {
+streamvix. { $DOM A I N } {
     import cors
     
     header {
@@ -400,7 +401,7 @@ streamvix.{$DOMAIN} {
 }
 
 # Example: NZBDav
-nzbdav.{$DOMAIN} {
+nzbdav. { $DOM A I N } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -428,7 +429,7 @@ nzbdav.{$DOMAIN} {
 }
 
 # Example: UsenetStreamer EN
-usenetstreamer-en.{$DOMAIN}, usenetstreamer.{$DOMAIN} {
+usenetstreamer-en. { $DOM A I N }, usenetstreamer. { $DOM AIN } {
     import cors
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -452,8 +453,8 @@ usenetstreamer-en.{$DOMAIN}, usenetstreamer.{$DOMAIN} {
     }
 }
     
-# Example: Corsario Viola
-corsario.{$DOMAIN} {
+# Example   :  Cors ar io Viola
+corsario. { $DOM A I N } {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -476,8 +477,8 @@ corsario.{$DOMAIN} {
     }
 }
 
-# Example: UsenetStreamer ES
-usenetstreamer-es.{$DOMAIN} {
+# Example: UsenetS   t ream er  ES
+usenetstreamer-es. { $DOM A I N } {
     import cors
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -501,8 +502,8 @@ usenetstreamer-es.{$DOMAIN} {
     }
 }
 
-# Example: UsenetStreamer IT
-usenetstreamer-it.{$DOMAIN} {
+# Example: UsenetS          t  re am  er  IT
+usenetstreamer-it. { $ DOMAIN } {
     import cors
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -521,7 +522,6 @@ usenetstreamer-it.{$DOMAIN} {
 
     reverse_proxy usenetstreamer-it:7005 {
         transport http {
-            keepalive 5m
         }
     }
 }
