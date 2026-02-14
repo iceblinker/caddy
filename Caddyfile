@@ -345,8 +345,29 @@ flaresolverr. { $DOMAIN } {
         }
     }
 }
+# Example: NZBHydra2
+nzbhydra. { $DOMAIN }, nzbhydra2. { $DOMAIN } {
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+        X-Robots-Tag "noindex, nofollow"
+    }
 
+    log {
+        format json
+        output stdout
+    }
 
+    reverse_proxy nzbhydra:5076 {
+        transport http {
+            keepalive 5m
+        }
+    }
+}
 
 # Example: Sootio
 sootio. { $DOMAIN } {
