@@ -1,4 +1,4 @@
-{
+﻿{
     # Global Options
     email { $ACME_EMAIL }
 
@@ -556,7 +556,7 @@ usenetstreamer-it. { $DOMAIN } {
 }
 
 # Example: Grafana
-grafana. { $DOMAIN } {
+grafana.{$DOMAIN} {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -575,7 +575,7 @@ grafana. { $DOMAIN } {
 }
 
 # Example: CORS Anywhere
-cors. { $DOMAIN } {
+cors.{$DOMAIN} {
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
