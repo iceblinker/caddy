@@ -417,8 +417,9 @@ nzbdav. { $DOMAIN } {
         X-Robots-Tag "noindex, nofollow"
     }
 
-    basic_auth / {
-        admin $2y$05$1v1lXF0K1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1
+    # Basic Auth: Password is your SABnzbd API Key
+    basic_auth {
+        admin JDJ5JDA1JExRSHp6L29uS25aSDZ2NXV0WW96YnVTeVR2ak0zdjU4UmE0WGFKSmNqQkRWUDRGNHY2R0tH
     }
 
     log {
