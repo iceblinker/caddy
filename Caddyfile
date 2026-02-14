@@ -345,6 +345,7 @@ flaresolverr. { $DOMAIN } {
         }
     }
 }
+
 # Example: NZBHydra2
 nzbhydra. { $DOMAIN }, nzbhydra2. { $DOMAIN } {
     header {
