@@ -142,7 +142,7 @@ aiostreams. { $DOMAIN } {
         header_down -Access-Control-Allow-Methods
         header_down -Access-Control-Allow-Headers
         header_down -Access-Control-Max-Age
-        
+
         transport http {
             keepalive 5m
         }
@@ -278,17 +278,17 @@ catalogs. { $DOMAIN } {
         output stdout
     }
 
-    reverse_proxy vixsrc-addon:3000 {
+    reverse_proxy vixsrc-addon:3003 {
         transport http {
             keepalive 5m
             dial_timeout 2s
             response_header_timeout 30s
         }
-        
+
         # Force DNS lookup retry to prevent stale IP routing
         lb_try_duration 1s
         lb_try_interval 250ms
-        
+
         # Health check to detect when routing to wrong container
         health_uri /
         health_interval 10s
@@ -366,7 +366,7 @@ sootio. { $DOMAIN } {
         output stdout
     }
 
-    reverse_proxy sootio:3000 {
+    reverse_proxy sootio:3002 {
         transport http {
             keepalive 5m
         }
@@ -376,7 +376,7 @@ sootio. { $DOMAIN } {
 # Example: Streamvix
 streamvix. { $DOMAIN } {
     import cors
-    
+
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options "nosniff"
@@ -398,7 +398,7 @@ streamvix. { $DOMAIN } {
         header_down -Access-Control-Allow-Methods
         header_down -Access-Control-Allow-Headers
         header_down -Access-Control-Max-Age
-        
+
         transport http {
             keepalive 5m
         }
@@ -416,7 +416,7 @@ nzbdav. { $DOMAIN } {
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
         X-Robots-Tag "noindex, nofollow"
     }
-        
+
     basic_auth / {
         admin $2y$05$1v1lXF0K1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1
     }
@@ -457,7 +457,7 @@ usenetstreamer-en. { $DOMAIN }, usenetstreamer. { $DOMAIN } {
         }
     }
 }
-    
+
 # Example: Corsario Viola
 corsario. { $DOMAIN } {
     header {
@@ -475,7 +475,7 @@ corsario. { $DOMAIN } {
         output stdout
     }
 
-    reverse_proxy corsario:3000 {
+    reverse_proxy corsario:3001 {
         transport http {
             keepalive 5m
         }

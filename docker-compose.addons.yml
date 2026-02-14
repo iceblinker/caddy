@@ -102,7 +102,7 @@ services:
       - .env
     environment:
       - DATABASE_URL=postgresql://corsario:corsario@corsario-db:5432/corsario
-      - PORT=3000
+      - PORT=3001
     depends_on:
       corsario-db:
         condition: service_healthy
@@ -179,7 +179,7 @@ services:
       - ../sootio/.env
     environment:
       - ADDON_URL=https://sootio.${DOMAIN}
-      - PORT=3000
+      - PORT=3002
       - DATABASE_URL=postgresql://sootio:sootio@sootio-db:5432/sootio
       - FLARESOLVERR_URL=http://gluetun:8191
       - SCRAPER_TIMEOUT=60000
@@ -215,7 +215,7 @@ services:
     container_name: vixsrc-addon
     restart: unless-stopped
     environment:
-      - PORT=3000
+      - PORT=3003
     volumes:
       - ~/catalogs-vixsrc/catalog.db:/app/catalog.db
     networks:
